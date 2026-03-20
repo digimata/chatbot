@@ -4,8 +4,6 @@ import {
   createUIMessageStream,
   createUIMessageStreamResponse,
   generateId,
-  stepCountIs,
-  streamText,
 } from "ai";
 import { checkBotId } from "botid/server";
 import { headers } from "next/headers";
@@ -23,6 +21,7 @@ import {
   updateMessage,
 } from "@/db/queries";
 import type { DBMessage } from "@/db/schema";
+import { createChatAgent } from "@/lib/ai/agent";
 import { entitlementsByIsAnonymous } from "@/lib/ai/entitlements";
 import {
   allowedModelIds,
@@ -37,7 +36,6 @@ import { getWeather } from "@/lib/ai/tools/get-weather";
 import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
 import { updateDocument } from "@/lib/ai/tools/update-document";
 import { auth } from "@/lib/auth";
-import { isProductionEnvironment } from "@/lib/constants";
 import { env } from "@/lib/env";
 import { ChatbotError } from "@/lib/errors";
 import { checkIpRateLimit } from "@/lib/ratelimit";
@@ -52,8 +50,8 @@ import { type PostRequestBody, postRequestBodySchema } from "./schema";
 // export const maxDuration           L57
 // function getStreamContext()        L59
 // export async function POST()       L69
-// async consumeSseStream()          L302
-// export async function DELETE()    L333
+// async consumeSseStream()          L305
+// export async function DELETE()    L336
 // --------------------------------------
 
 export const maxDuration = 60;
@@ -202,29 +200,31 @@ export async function POST(request: Request) {
 
     const modelMessages = await convertToModelMessages(uiMessages);
 
+    const cfg = {
+      model: getLanguageModel(chatModel),
+      instructions: systemPrompt({ requestHints, supportsTools }),
+      activeTools:
+        isReasoningModel && !supportsTools
+          ? []
+          : [
+              "getWeather",
+              "createDocument",
+              "editDocument",
+              "updateDocument",
+              "requestSuggestions",
+            ],
+      providerOptions: {
+        ...(modelConfig?.reasoningEffort && {
+          openai: { reasoningEffort: modelConfig.reasoningEffort },
+        }),
+      },
+    };
+
     const stream = createUIMessageStream({
       originalMessages: isToolApprovalFlow ? uiMessages : undefined,
       execute: async ({ writer: dataStream }) => {
-        const result = streamText({
-          model: getLanguageModel(chatModel),
-          system: systemPrompt({ requestHints, supportsTools }),
-          messages: modelMessages,
-          stopWhen: stepCountIs(5),
-          experimental_activeTools:
-            isReasoningModel && !supportsTools
-              ? []
-              : [
-                  "getWeather",
-                  "createDocument",
-                  "editDocument",
-                  "updateDocument",
-                  "requestSuggestions",
-                ],
-          providerOptions: {
-            ...(modelConfig?.reasoningEffort && {
-              openai: { reasoningEffort: modelConfig.reasoningEffort },
-            }),
-          },
+        const agent = createChatAgent({
+          ...cfg,
           tools: {
             getWeather,
             createDocument: createDocument({
@@ -244,12 +244,9 @@ export async function POST(request: Request) {
               modelId: chatModel,
             }),
           },
-          experimental_telemetry: {
-            isEnabled: isProductionEnvironment,
-            functionId: "stream-text",
-          },
         });
 
+        const result = await agent.stream({ messages: modelMessages });
         dataStream.merge(
           result.toUIMessageStream({ sendReasoning: isReasoningModel })
         );
