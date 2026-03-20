@@ -25,6 +25,7 @@ import { getWeather } from "@/lib/ai/tools/get-weather";
 import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
 import { updateDocument } from "@/lib/ai/tools/update-document";
 import { isProductionEnvironment } from "@/lib/constants";
+import { env } from "@/lib/env";
 import {
   createStreamId,
   deleteChatById,
@@ -35,8 +36,8 @@ import {
   saveMessages,
   updateChatTitleById,
   updateMessage,
-} from "@/lib/db/queries";
-import type { DBMessage } from "@/lib/db/schema";
+} from "@/db/queries";
+import type { DBMessage } from "@/db/schema";
 import { ChatbotError } from "@/lib/errors";
 import { checkIpRateLimit } from "@/lib/ratelimit";
 import type { ChatMessage } from "@/lib/types";
@@ -300,7 +301,7 @@ export async function POST(request: Request) {
     return createUIMessageStreamResponse({
       stream,
       async consumeSseStream({ stream: sseStream }) {
-        if (!process.env.REDIS_URL) {
+        if (!env.REDIS_URL) {
           return;
         }
         try {

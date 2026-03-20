@@ -1,6 +1,28 @@
+// ------------------------------------
+// src/components/chat/message.tsx
+//
+// const PurePreviewMessage         L46
+// addToolApprovalResponse          L58
+// chatId                           L59
+// message                          L60
+// vote                             L61
+// isLoading                        L62
+// setMessages                      L63
+// regenerate                       L64
+// isReadonly                       L65
+// requiresScrollPadding            L66
+// onEdit                           L67
+// approval                        L155
+// id                              L155
+// approval                        L159
+// approved                        L159
+// export const PreviewMessage     L385
+// export const ThinkingMessage    L387
+// ------------------------------------
+
 "use client";
 import type { UseChatHelpers } from "@ai-sdk/react";
-import type { Vote } from "@/lib/db/schema";
+import type { Vote } from "@/db/schema";
 import type { ChatMessage } from "@/lib/types";
 import { cn, sanitizeText } from "@/lib/utils";
 import { MessageContent, MessageResponse } from "../ai-elements/message";

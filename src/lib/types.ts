@@ -5,7 +5,41 @@ import type { createDocument } from "./ai/tools/create-document";
 import type { getWeather } from "./ai/tools/get-weather";
 import type { requestSuggestions } from "./ai/tools/request-suggestions";
 import type { updateDocument } from "./ai/tools/update-document";
-import type { Suggestion } from "./db/schema";
+import type { Suggestion } from "@/db/schema";
+
+// -----------------------------------------
+// src/lib/types.ts
+//
+// export const messageMetadataSchema    L44
+// export type MessageMetadata           L48
+// type weatherTool                      L50
+// type createDocumentTool               L51
+// type updateDocumentTool               L52
+// type requestSuggestionsTool           L53
+// export type ChatTools                 L57
+// getWeather                            L58
+// createDocument                        L59
+// updateDocument                        L60
+// requestSuggestions                    L61
+// export type CustomUIDataTypes         L64
+// textDelta                             L65
+// imageDelta                            L66
+// sheetDelta                            L67
+// codeDelta                             L68
+// suggestion                            L69
+// appendMessage                         L70
+// id                                    L71
+// title                                 L72
+// kind                                  L73
+// clear                                 L74
+// finish                                L75
+// " chat-title                          L76
+// export type ChatMessage               L79
+// export type Attachment                L85
+// name                                  L86
+// url                                   L87
+// contentType                           L88
+// -----------------------------------------
 
 export const messageMetadataSchema = z.object({
   createdAt: z.string(),

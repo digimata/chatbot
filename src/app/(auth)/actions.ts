@@ -1,8 +1,20 @@
+// --------------------------------------
+// src/app/(auth)/actions.ts
+//
+// const authFormSchema               L21
+// export type LoginActionState       L26
+// status                             L27
+// export const login                 L30
+// export type RegisterActionState    L56
+// status                             L57
+// export const register              L66
+// --------------------------------------
+
 "use server";
 
 import { z } from "zod";
 
-import { createUser, getUser } from "@/lib/db/queries";
+import { createUser, getUser } from "@/db/queries";
 
 import { signIn } from "./auth";
 

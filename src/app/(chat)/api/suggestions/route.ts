@@ -1,6 +1,12 @@
 import { auth } from "@/app/(auth)/auth";
-import { getSuggestionsByDocumentId } from "@/lib/db/queries";
+import { getSuggestionsByDocumentId } from "@/db/queries";
 import { ChatbotError } from "@/lib/errors";
+
+// ----------------------------------
+// src/app/(chat)/api/suggestions/route.ts
+//
+// export async function GET()    L11
+// ----------------------------------
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

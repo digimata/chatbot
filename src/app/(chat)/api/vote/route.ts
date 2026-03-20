@@ -1,7 +1,15 @@
 import { z } from "zod";
 import { auth } from "@/app/(auth)/auth";
-import { getChatById, getVotesByChatId, voteMessage } from "@/lib/db/queries";
+import { getChatById, getVotesByChatId, voteMessage } from "@/db/queries";
 import { ChatbotError } from "@/lib/errors";
+
+// ------------------------------------
+// src/app/(chat)/api/vote/route.ts
+//
+// const voteSchema                 L14
+// export async function GET()      L20
+// export async function PATCH()    L52
+// ------------------------------------
 
 const voteSchema = z.object({
   chatId: z.string(),

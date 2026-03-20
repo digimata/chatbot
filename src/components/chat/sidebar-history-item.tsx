@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { memo } from "react";
 import { useChatVisibility } from "@/hooks/use-chat-visibility";
-import type { Chat } from "@/lib/db/schema";
+import type { Chat } from "@/db/schema";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +25,17 @@ import {
   ShareIcon,
   TrashIcon,
 } from "./icons";
+
+// -----------------------------
+// src/components/chat/sidebar-history-item.tsx
+//
+// const PureChatItem        L40
+// chat                      L46
+// isActive                  L47
+// onDelete                  L48
+// setOpenMobile             L49
+// export const ChatItem    L130
+// -----------------------------
 
 const PureChatItem = ({
   chat,

@@ -1,3 +1,15 @@
+// ---------------------------------
+// src/components/chat/version-footer.tsx
+//
+// type VersionFooterProps       L26
+// handleVersionChange           L27
+// documents                     L28
+// currentVersionIndex           L29
+// mode                          L30
+// setMode                       L31
+// export const VersionFooter    L34
+// ---------------------------------
+
 "use client";
 
 import { isAfter } from "date-fns";
@@ -7,7 +19,7 @@ import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { useSWRConfig } from "swr";
 import { useArtifact } from "@/hooks/use-artifact";
-import type { Document } from "@/lib/db/schema";
+import type { Document } from "@/db/schema";
 import { cn, getDocumentTimestampByIndex } from "@/lib/utils";
 import { LoaderIcon } from "./icons";
 

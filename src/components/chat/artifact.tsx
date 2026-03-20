@@ -18,7 +18,7 @@ import { imageArtifact } from "@/artifacts/image/client";
 import { sheetArtifact } from "@/artifacts/sheet/client";
 import { textArtifact } from "@/artifacts/text/client";
 import { useArtifact } from "@/hooks/use-artifact";
-import type { Document, Vote } from "@/lib/db/schema";
+import type { Document, Vote } from "@/db/schema";
 import type { Attachment, ChatMessage } from "@/lib/types";
 import { fetcher } from "@/lib/utils";
 import { useSidebar } from "../ui/sidebar";
@@ -28,6 +28,48 @@ import { LoaderIcon } from "./icons";
 import { Toolbar } from "./toolbar";
 import { VersionFooter } from "./version-footer";
 import type { VisibilityType } from "./visibility-selector";
+
+// -----------------------------------------
+// src/components/chat/artifact.tsx
+//
+// export const artifactDefinitions      L74
+// export type ArtifactKind              L80
+// export type UIArtifact                L82
+// title                                 L83
+// documentId                            L84
+// kind                                  L85
+// content                               L86
+// isVisible                             L87
+// status                                L88
+// boundingBox                           L89
+// top                                   L90
+// left                                  L91
+// width                                 L92
+// height                                L93
+// function PureArtifact()               L97
+// addToolApprovalResponse              L115
+// chatId                               L116
+// input                                L117
+// setInput                             L118
+// status                               L119
+// stop                                 L120
+// attachments                          L121
+// setAttachments                       L122
+// messages                             L123
+// setMessages                          L124
+// votes                                L125
+// sendMessage                          L126
+// regenerate                           L127
+// isReadonly                           L128
+// selectedVisibilityType               L129
+// selectedModelId                      L130
+// function getDocumentContentById()    L269
+// status                               L344
+// contents                             L345
+// type                                 L345
+// value                                L345
+// export const Artifact                L506
+// -----------------------------------------
 
 export const artifactDefinitions = [
   textArtifact,

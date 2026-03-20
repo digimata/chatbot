@@ -1,8 +1,17 @@
 import { tool, type UIMessageStreamWriter } from "ai";
 import type { Session } from "next-auth";
 import { z } from "zod";
-import { getDocumentById, saveDocument } from "@/lib/db/queries";
+import { getDocumentById, saveDocument } from "@/db/queries";
 import type { ChatMessage } from "@/lib/types";
+
+// --------------------------------
+// src/lib/ai/tools/edit-document.ts
+//
+// type EditDocumentProps       L16
+// session                      L17
+// dataStream                   L18
+// export const editDocument    L21
+// --------------------------------
 
 type EditDocumentProps = {
   session: Session;

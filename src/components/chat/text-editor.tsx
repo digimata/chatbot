@@ -1,3 +1,22 @@
+// -----------------------------
+// src/components/chat/text-editor.tsx
+//
+// type EditorProps          L48
+// content                   L49
+// onSaveContent             L50
+// status                    L51
+// isCurrentVersion          L52
+// currentVersionIndex       L53
+// suggestions               L54
+// onSuggestionSelect        L55
+// onSuggestionApply         L56
+// activeSuggestion          L57
+// function PureEditor()     L60
+// click()                   L96
+// function areEqual()      L250
+// export const Editor      L261
+// -----------------------------
+
 "use client";
 
 import { exampleSetup } from "prosemirror-example-setup";
@@ -7,7 +26,7 @@ import { type Decoration, DecorationSet, EditorView } from "prosemirror-view";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-import type { Suggestion } from "@/lib/db/schema";
+import type { Suggestion } from "@/db/schema";
 import {
   documentSchema,
   handleTransaction,

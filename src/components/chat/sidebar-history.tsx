@@ -1,3 +1,22 @@
+// -----------------------------------------------------
+// src/components/chat/sidebar-history.tsx
+//
+// type GroupedChats                                 L51
+// today                                             L52
+// yesterday                                         L53
+// lastWeek                                          L54
+// lastMonth                                         L55
+// older                                             L56
+// export type ChatHistory                           L59
+// chats                                             L60
+// hasMore                                           L61
+// const PAGE_SIZE                                   L64
+// const groupChatsByDate                            L66
+// export function getChatHistoryPaginationKey()     L99
+// export function SidebarHistory()                 L120
+// user                                             L120
+// -----------------------------------------------------
+
 "use client";
 
 import { isToday, isYesterday, subMonths, subWeeks } from "date-fns";
@@ -24,7 +43,7 @@ import {
   SidebarMenu,
   useSidebar,
 } from "@/components/ui/sidebar";
-import type { Chat } from "@/lib/db/schema";
+import type { Chat } from "@/db/schema";
 import { fetcher } from "@/lib/utils";
 import { LoaderIcon } from "./icons";
 import { ChatItem } from "./sidebar-history-item";

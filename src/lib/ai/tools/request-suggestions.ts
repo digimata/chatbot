@@ -1,11 +1,21 @@
 import { Output, streamText, tool, type UIMessageStreamWriter } from "ai";
 import type { Session } from "next-auth";
 import { z } from "zod";
-import { getDocumentById, saveSuggestions } from "@/lib/db/queries";
-import type { Suggestion } from "@/lib/db/schema";
+import { getDocumentById, saveSuggestions } from "@/db/queries";
+import type { Suggestion } from "@/db/schema";
 import type { ChatMessage } from "@/lib/types";
 import { generateUUID } from "@/lib/utils";
 import { getLanguageModel } from "../providers";
+
+// --------------------------------------
+// src/lib/ai/tools/request-suggestions.ts
+//
+// type RequestSuggestionsProps       L20
+// session                            L21
+// dataStream                         L22
+// modelId                            L23
+// export const requestSuggestions    L26
+// --------------------------------------
 
 type RequestSuggestionsProps = {
   session: Session;

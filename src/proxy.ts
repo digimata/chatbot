@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { guestRegex, isDevelopmentEnvironment } from "@/lib/constants";
+import { env } from "@/lib/env";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -15,11 +16,11 @@ export async function proxy(request: NextRequest) {
 
   const token = await getToken({
     req: request,
-    secret: process.env.AUTH_SECRET,
+    secret: env.AUTH_SECRET,
     secureCookie: !isDevelopmentEnvironment,
   });
 
-  const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const base = env.NEXT_PUBLIC_BASE_PATH;
 
   if (!token) {
     const redirectUrl = encodeURIComponent(new URL(request.url).pathname);

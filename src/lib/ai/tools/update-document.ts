@@ -2,8 +2,18 @@ import { tool, type UIMessageStreamWriter } from "ai";
 import type { Session } from "next-auth";
 import { z } from "zod";
 import { documentHandlersByArtifactKind } from "@/lib/artifacts/server";
-import { getDocumentById } from "@/lib/db/queries";
+import { getDocumentById } from "@/db/queries";
 import type { ChatMessage } from "@/lib/types";
+
+// ----------------------------------
+// src/lib/ai/tools/update-document.ts
+//
+// type UpdateDocumentProps       L18
+// session                        L19
+// dataStream                     L20
+// modelId                        L21
+// export const updateDocument    L24
+// ----------------------------------
 
 type UpdateDocumentProps = {
   session: Session;

@@ -1,6 +1,12 @@
 import { auth } from "@/app/(auth)/auth";
-import { getChatById, getMessagesByChatId } from "@/lib/db/queries";
+import { getChatById, getMessagesByChatId } from "@/db/queries";
 import { convertToUIMessages } from "@/lib/utils";
+
+// ----------------------------------
+// src/app/(chat)/api/messages/route.ts
+//
+// export async function GET()    L11
+// ----------------------------------
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

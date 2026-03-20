@@ -22,7 +22,7 @@
 // export const modelsByProvider        L200
 // -----------------------------------------
 
-export const DEFAULT_CHAT_MODEL = "anthropic/claude-sonnet-4-20250514";
+export const DEFAULT_CHAT_MODEL = "openai/gpt-5.2";
 
 export const titleModel = {
   id: "openai/gpt-4.1-nano",
@@ -76,6 +76,31 @@ export const chatModels: ChatModel[] = [
     name: "GPT-5 Nano",
     provider: "openai",
     description: "Fastest GPT-5 variant",
+    capabilities: { tools: true, vision: true, reasoning: true },
+  },
+
+  // GPT-5.2
+  {
+    id: "openai/gpt-5.2",
+    name: "GPT-5.2",
+    provider: "openai",
+    description: "Latest GPT-5 series model",
+    capabilities: { tools: true, vision: true, reasoning: true },
+  },
+  {
+    id: "openai/gpt-5.2-pro",
+    name: "GPT-5.2 Pro",
+    provider: "openai",
+    description: "Most capable GPT-5.2 variant",
+    capabilities: { tools: true, vision: true, reasoning: true },
+  },
+
+  // GPT-5.1
+  {
+    id: "openai/gpt-5.1",
+    name: "GPT-5.1",
+    provider: "openai",
+    description: "GPT-5.1 series model",
     capabilities: { tools: true, vision: true, reasoning: true },
   },
 
@@ -189,7 +214,9 @@ export function getCapabilities(): Record<string, ModelCapabilities> {
   );
 }
 
-export const isDemo = process.env.IS_DEMO === "1";
+import { env } from "../env";
+
+export const isDemo = env.IS_DEMO;
 
 export function getActiveModels(): ChatModel[] {
   return chatModels;

@@ -3,18 +3,19 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { customProvider } from "ai";
 import { isTestEnvironment } from "../constants";
+import { env } from "../env";
 import { titleModel } from "./models";
 
 const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: env.OPENAI_API_KEY,
 });
 
 const anthropic = createAnthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+  apiKey: env.ANTHROPIC_API_KEY,
 });
 
 const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+  apiKey: env.GOOGLE_GENERATIVE_AI_API_KEY,
 });
 
 const providers: Record<string, (modelId: string) => ReturnType<typeof openai>> = {

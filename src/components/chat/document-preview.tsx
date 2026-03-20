@@ -1,3 +1,33 @@
+// -----------------------------------------
+// src/components/chat/document-preview.tsx
+//
+// type DocumentToolOutput               L60
+// id                                    L61
+// title                                 L62
+// kind                                  L63
+// content                               L64
+// type DocumentPreviewProps             L67
+// isReadonly                            L68
+// result                                L69
+// args                                  L70
+// isUpdate                              L70
+// export function DocumentPreview()     L73
+// const LoadingSkeleton                L166
+// artifactKind                         L166
+// const PureHitboxLayer                L187
+// hitboxRef                            L192
+// result                               L193
+// setArtifact                          L194
+// const HitboxLayer                    L236
+// const PureDocumentHeader             L243
+// title                                L248
+// kind                                 L249
+// isStreaming                          L250
+// const DocumentHeader                 L273
+// const DocumentContent                L284
+// document                             L284
+// -----------------------------------------
+
 "use client";
 
 import equal from "fast-deep-equal";
@@ -11,7 +41,7 @@ import {
 } from "react";
 import useSWR from "swr";
 import { useArtifact } from "@/hooks/use-artifact";
-import type { Document } from "@/lib/db/schema";
+import type { Document } from "@/db/schema";
 import { cn, fetcher } from "@/lib/utils";
 import type { ArtifactKind, UIArtifact } from "./artifact";
 import { CodeEditor } from "./code-editor";

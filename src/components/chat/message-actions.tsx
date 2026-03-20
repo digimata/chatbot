@@ -3,13 +3,25 @@ import { memo } from "react";
 import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { useCopyToClipboard } from "usehooks-ts";
-import type { Vote } from "@/lib/db/schema";
+import type { Vote } from "@/db/schema";
 import type { ChatMessage } from "@/lib/types";
 import {
   MessageAction as Action,
   MessageActions as Actions,
 } from "../ai-elements/message";
 import { CopyIcon, PencilEditIcon, ThumbDownIcon, ThumbUpIcon } from "./icons";
+
+// --------------------------------------------
+// src/components/chat/message-actions.tsx
+//
+// export function PureMessageActions()     L26
+// chatId                                   L33
+// message                                  L34
+// vote                                     L35
+// isLoading                                L36
+// onEdit                                   L37
+// export const MessageActions             L207
+// --------------------------------------------
 
 export function PureMessageActions({
   chatId,

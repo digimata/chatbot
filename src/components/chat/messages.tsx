@@ -2,12 +2,32 @@ import type { UseChatHelpers } from "@ai-sdk/react";
 import { ArrowDownIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useMessages } from "@/hooks/use-messages";
-import type { Vote } from "@/lib/db/schema";
+import type { Vote } from "@/db/schema";
 import type { ChatMessage } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useDataStream } from "./data-stream-provider";
 import { Greeting } from "./greeting";
 import { PreviewMessage, ThinkingMessage } from "./message";
+
+// -------------------------------
+// src/components/chat/messages.tsx
+//
+// type MessagesProps          L32
+// addToolApprovalResponse     L33
+// chatId                      L34
+// status                      L35
+// votes                       L36
+// messages                    L37
+// setMessages                 L38
+// regenerate                  L39
+// isReadonly                  L40
+// isArtifactVisible           L41
+// isLoading                   L42
+// selectedModelId             L43
+// onEditMessage               L44
+// function PureMessages()     L47
+// export const Messages      L149
+// -------------------------------
 
 type MessagesProps = {
   addToolApprovalResponse: UseChatHelpers<ChatMessage>["addToolApprovalResponse"];

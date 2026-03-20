@@ -1,9 +1,74 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import type { DataUIPart } from "ai";
 import type { ComponentType, Dispatch, ReactNode, SetStateAction } from "react";
-import type { Suggestion } from "@/lib/db/schema";
+import type { Suggestion } from "@/db/schema";
 import type { ChatMessage, CustomUIDataTypes } from "@/lib/types";
 import type { UIArtifact } from "./artifact";
+
+// ------------------------------------------
+// src/components/chat/create-artifact.tsx
+//
+// export type ArtifactActionContext      L73
+// content                                L74
+// handleVersionChange                    L75
+// currentVersionIndex                    L76
+// isCurrentVersion                       L77
+// mode                                   L78
+// metadata                               L79
+// setMetadata                            L80
+// type ArtifactAction                    L83
+// icon                                   L84
+// label                                  L85
+// description                            L86
+// onClick                                L87
+// isDisabled                             L88
+// export type ArtifactToolbarContext     L91
+// sendMessage                            L92
+// export type ArtifactToolbarItem        L95
+// description                            L96
+// icon                                   L97
+// onClick                                L98
+// type ArtifactContent                  L101
+// title                                 L102
+// content                               L103
+// mode                                  L104
+// isCurrentVersion                      L105
+// currentVersionIndex                   L106
+// status                                L107
+// suggestions                           L108
+// onSaveContent                         L109
+// isInline                              L110
+// getDocumentContentById                L111
+// isLoading                             L112
+// metadata                              L113
+// setMetadata                           L114
+// type InitializeParameters             L117
+// documentId                            L118
+// setMetadata                           L119
+// type ArtifactConfig                   L122
+// kind                                  L123
+// description                           L124
+// content                               L125
+// actions                               L126
+// toolbar                               L127
+// initialize                            L128
+// onStreamPart                          L129
+// setMetadata                           L130
+// setArtifact                           L131
+// streamPart                            L132
+// export class Artifact                 L136
+//   readonly kind                       L137
+//   readonly description                L138
+//   readonly content                    L139
+//   readonly actions                    L140
+//   readonly toolbar                    L141
+//   readonly initialize                 L142
+//   readonly onStreamPart               L143
+//   setMetadata                         L144
+//   setArtifact                         L145
+//   streamPart                          L146
+//   constructor()                       L149
+// ------------------------------------------
 
 export type ArtifactActionContext<M = any> = {
   content: string;

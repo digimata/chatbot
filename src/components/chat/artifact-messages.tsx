@@ -3,10 +3,28 @@ import equal from "fast-deep-equal";
 import { AnimatePresence, motion } from "framer-motion";
 import { memo } from "react";
 import { useMessages } from "@/hooks/use-messages";
-import type { Vote } from "@/lib/db/schema";
+import type { Vote } from "@/db/schema";
 import type { ChatMessage } from "@/lib/types";
 import type { UIArtifact } from "./artifact";
 import { PreviewMessage, ThinkingMessage } from "./message";
+
+// ---------------------------------------
+// src/components/chat/artifact-messages.tsx
+//
+// type ArtifactMessagesProps          L29
+// addToolApprovalResponse             L30
+// chatId                              L31
+// status                              L32
+// votes                               L33
+// messages                            L34
+// setMessages                         L35
+// regenerate                          L36
+// isReadonly                          L37
+// artifactStatus                      L38
+// function PureArtifactMessages()     L41
+// function areEqual()                L106
+// export const ArtifactMessages      L133
+// ---------------------------------------
 
 type ArtifactMessagesProps = {
   addToolApprovalResponse: UseChatHelpers<ChatMessage>["addToolApprovalResponse"];

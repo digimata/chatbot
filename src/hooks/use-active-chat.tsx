@@ -1,3 +1,35 @@
+// --------------------------------------------
+// src/hooks/use-active-chat.tsx
+//
+// type ActiveChatContextValue              L63
+// chatId                                   L64
+// messages                                 L65
+// setMessages                              L66
+// sendMessage                              L67
+// status                                   L68
+// stop                                     L69
+// regenerate                               L70
+// addToolApprovalResponse                  L71
+// input                                    L72
+// setInput                                 L73
+// visibilityType                           L74
+// isReadonly                               L75
+// isLoading                                L76
+// votes                                    L77
+// currentModelId                           L78
+// setCurrentModelId                        L79
+// showCreditCardAlert                      L80
+// setShowCreditCardAlert                   L81
+// const ActiveChatContext                  L84
+// function extractChatId()                 L86
+// export function ActiveChatProvider()     L91
+// children                                 L91
+// approved                                L153
+// prepareSendMessagesRequest()            L160
+// state                                   L166
+// export function useActiveChat()         L327
+// --------------------------------------------
+
 "use client";
 
 import type { UseChatHelpers } from "@ai-sdk/react";
@@ -23,7 +55,7 @@ import { toast } from "@/components/chat/toast";
 import type { VisibilityType } from "@/components/chat/visibility-selector";
 import { useAutoResume } from "@/hooks/use-auto-resume";
 import { DEFAULT_CHAT_MODEL } from "@/lib/ai/models";
-import type { Vote } from "@/lib/db/schema";
+import type { Vote } from "@/db/schema";
 import { ChatbotError } from "@/lib/errors";
 import type { ChatMessage } from "@/lib/types";
 import { fetcher, fetchWithErrorHandlers, generateUUID } from "@/lib/utils";

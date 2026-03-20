@@ -1,3 +1,18 @@
+// ---------------------------------
+// src/components/chat/code-editor.tsx
+//
+// type EditorProps              L26
+// content                       L27
+// onSaveContent                 L28
+// status                        L29
+// isCurrentVersion              L30
+// currentVersionIndex           L31
+// suggestions                   L32
+// function PureCodeEditor()     L35
+// scroll()                      L77
+// export const CodeEditor      L151
+// ---------------------------------
+
 "use client";
 
 import { python } from "@codemirror/lang-python";
@@ -6,7 +21,7 @@ import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorView } from "@codemirror/view";
 import { basicSetup } from "codemirror";
 import { memo, useEffect, useRef } from "react";
-import type { Suggestion } from "@/lib/db/schema";
+import type { Suggestion } from "@/db/schema";
 
 type EditorProps = {
   content: string;

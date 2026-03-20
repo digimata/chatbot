@@ -3,8 +3,29 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import type { DefaultJWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 import { DUMMY_PASSWORD } from "@/lib/constants";
-import { createGuestUser, getUser } from "@/lib/db/queries";
+import { createGuestUser, getUser } from "@/db/queries";
 import { authConfig } from "./auth.config";
+
+// ----------------------------
+// src/app/(auth)/auth.ts
+//
+// export type UserType     L30
+// interface Session        L33
+//   user                   L34
+//   id                     L35
+//   type                   L36
+// interface User           L40
+//   id                     L41
+//   email                  L42
+//   type                   L43
+// interface JWT            L48
+//   id                     L49
+//   type                   L50
+// async authorize()        L67
+// async authorize()        L96
+// jwt()                   L103
+// session()               L111
+// ----------------------------
 
 export type UserType = "guest" | "regular";
 

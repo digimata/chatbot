@@ -1,3 +1,16 @@
+// -----------------------------------------------------------
+// src/app/(chat)/actions.ts
+//
+// export async function saveChatModelAsCookie()           L30
+// export async function generateTitleFromUserMessage()    L35
+// message                                                 L38
+// export async function deleteTrailingMessages()          L51
+// id                                                      L51
+// export async function updateChatVisibility()            L73
+// chatId                                                  L77
+// visibility                                              L78
+// -----------------------------------------------------------
+
 "use server";
 
 import { generateText, type UIMessage } from "ai";
@@ -11,7 +24,7 @@ import {
   getChatById,
   getMessageById,
   updateChatVisibilityById,
-} from "@/lib/db/queries";
+} from "@/db/queries";
 import { getTextFromMessage } from "@/lib/utils";
 
 export async function saveChatModelAsCookie(model: string) {

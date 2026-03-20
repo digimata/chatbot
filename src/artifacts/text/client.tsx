@@ -11,8 +11,16 @@ import {
   UndoIcon,
 } from "@/components/chat/icons";
 import { Editor } from "@/components/chat/text-editor";
-import type { Suggestion } from "@/lib/db/schema";
+import type { Suggestion } from "@/db/schema";
 import { getSuggestions } from "../actions";
+
+// --------------------------------
+// src/artifacts/text/client.tsx
+//
+// type TextArtifactMetadata    L25
+// suggestions                  L26
+// export const textArtifact    L29
+// --------------------------------
 
 type TextArtifactMetadata = {
   suggestions: Suggestion[];

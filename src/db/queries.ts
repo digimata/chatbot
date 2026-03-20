@@ -16,8 +16,8 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import type { ArtifactKind } from "@/components/chat/artifact";
 import type { VisibilityType } from "@/components/chat/visibility-selector";
-import { ChatbotError } from "../errors";
-import { generateUUID } from "../utils";
+import { ChatbotError } from "@/lib/errors";
+import { generateUUID } from "@/lib/utils";
 import {
   type Chat,
   chat,
@@ -32,8 +32,9 @@ import {
   vote,
 } from "./schema";
 import { generateHashedPassword } from "./utils";
+import { env } from "@/lib/env";
 
-const client = postgres(process.env.POSTGRES_URL ?? "");
+const client = postgres(env.DATABASE_URL);
 const db = drizzle(client);
 
 export async function getUser(email: string): Promise<User[]> {

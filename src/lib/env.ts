@@ -1,0 +1,50 @@
+import { z } from "zod";
+
+// -----------------------
+// src/lib/env.ts
+//
+// const envSchema     L11
+// export const env    L46
+// export type Env     L50
+// -----------------------
+
+const envSchema = z.object({
+  // --- Database ---
+  DATABASE_URL: z.string().min(1),
+
+  // --- Auth ---
+  AUTH_SECRET: z.string().min(1),
+
+  // --- AI Providers (set the ones you use) ---
+  OPENAI_API_KEY: z.string().optional(),
+  ANTHROPIC_API_KEY: z.string().optional(),
+  GOOGLE_GENERATIVE_AI_API_KEY: z.string().optional(),
+
+  // --- Storage ---
+  BLOB_READ_WRITE_TOKEN: z.string().optional(),
+
+  // --- Redis (optional — resumable streams + rate limiting) ---
+  REDIS_URL: z.string().optional(),
+
+  // --- Deployment ---
+  IS_DEMO: z
+    .enum(["0", "1"])
+    .optional()
+    .transform((val) => val === "1"),
+  NEXT_PUBLIC_BASE_PATH: z.string().optional().default(""),
+
+  // --- Runtime ---
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .optional()
+    .default("development"),
+  PLAYWRIGHT_TEST_BASE_URL: z.string().optional(),
+  PLAYWRIGHT: z.string().optional(),
+  CI_PLAYWRIGHT: z.string().optional(),
+});
+
+export const env = envSchema.parse(
+  typeof process !== "undefined" ? process.env : {},
+);
+
+export type Env = z.infer<typeof envSchema>;

@@ -1,11 +1,21 @@
-import { generateDummyPassword } from "./db/utils";
+import { generateDummyPassword } from "@/db/utils";
+import { env } from "./env";
 
-export const isProductionEnvironment = process.env.NODE_ENV === "production";
-export const isDevelopmentEnvironment = process.env.NODE_ENV === "development";
+// --------------------------------------------
+// src/lib/constants.ts
+//
+// export const isProductionEnvironment     L14
+// export const isDevelopmentEnvironment    L15
+// export const isTestEnvironment           L16
+// export const guestRegex                  L22
+// export const DUMMY_PASSWORD              L24
+// export const suggestions                 L26
+// --------------------------------------------
+
+export const isProductionEnvironment = env.NODE_ENV === "production";
+export const isDevelopmentEnvironment = env.NODE_ENV === "development";
 export const isTestEnvironment = Boolean(
-  process.env.PLAYWRIGHT_TEST_BASE_URL ||
-    process.env.PLAYWRIGHT ||
-    process.env.CI_PLAYWRIGHT
+  env.PLAYWRIGHT_TEST_BASE_URL || env.PLAYWRIGHT || env.CI_PLAYWRIGHT
 );
 
 export const guestRegex = /^guest-\d+$/;

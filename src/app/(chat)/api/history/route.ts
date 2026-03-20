@@ -1,7 +1,14 @@
 import type { NextRequest } from "next/server";
 import { auth } from "@/app/(auth)/auth";
-import { deleteAllChatsByUserId, getChatsByUserId } from "@/lib/db/queries";
+import { deleteAllChatsByUserId, getChatsByUserId } from "@/db/queries";
 import { ChatbotError } from "@/lib/errors";
+
+// -------------------------------------
+// src/app/(chat)/api/history/route.ts
+//
+// export async function GET()       L13
+// export async function DELETE()    L46
+// -------------------------------------
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;

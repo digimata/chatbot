@@ -5,9 +5,24 @@ import type {
 import { type ClassValue, clsx } from 'clsx';
 import { formatISO } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
-import type { DBMessage, Document } from '@/lib/db/schema';
+import type { DBMessage, Document } from '@/db/schema';
 import { ChatbotError, type ErrorCode } from './errors';
 import type { ChatMessage, ChatTools, CustomUIDataTypes } from './types';
+
+// ------------------------------------------------------
+// src/lib/utils.ts
+//
+// export function cn()                               L27
+// export const fetcher                               L31
+// export async function fetchWithErrorHandlers()     L42
+// export function generateUUID()                     L64
+// export function getDocumentTimestampByIndex()      L72
+// export function sanitizeText()                     L82
+// export function convertToUIMessages()              L86
+// export function getTextFromMessage()               L97
+// text                                              L100
+// type                                              L100
+// ------------------------------------------------------
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

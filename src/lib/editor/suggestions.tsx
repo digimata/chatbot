@@ -1,7 +1,28 @@
 import type { Node } from "prosemirror-model";
 import { Plugin, PluginKey } from "prosemirror-state";
 import { DecorationSet } from "prosemirror-view";
-import type { Suggestion } from "@/lib/db/schema";
+import type { Suggestion } from "@/db/schema";
+
+// ----------------------------------------------
+// src/lib/editor/suggestions.tsx
+//
+// export interface UISuggestion              L27
+//   selectionStart                           L28
+//   selectionEnd                             L29
+// type Position                              L32
+// start                                      L33
+// end                                        L34
+// function findPositionsInDoc()              L37
+// end                                        L38
+// start                                      L38
+// export function projectWithPositions()     L60
+// export const suggestionsPluginKey          L83
+// export const suggestionsPlugin             L84
+// init()                                     L87
+// apply()                                    L90
+// decorations()                             L103
+// mousedown()                               L107
+// ----------------------------------------------
 
 export interface UISuggestion extends Suggestion {
   selectionStart: number;
