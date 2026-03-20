@@ -34,7 +34,7 @@ import {
 import { generateHashedPassword } from "./utils";
 import { env } from "@/lib/env";
 
-const client = postgres(env.DATABASE_URL);
+const client = postgres(env.DATABASE_URL!);
 const db = drizzle(client);
 
 export async function getUser(email: string): Promise<User[]> {

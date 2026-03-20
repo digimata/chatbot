@@ -8,12 +8,14 @@ import { z } from "zod";
 // export type Env     L50
 // -----------------------
 
+const isServer = typeof window === "undefined";
+
 const envSchema = z.object({
   // --- Database ---
-  DATABASE_URL: z.string().min(1),
+  DATABASE_URL: isServer ? z.string().min(1) : z.string().optional(),
 
   // --- Auth ---
-  AUTH_SECRET: z.string().min(1),
+  AUTH_SECRET: isServer ? z.string().min(1) : z.string().optional(),
 
   // --- AI Providers (set the ones you use) ---
   OPENAI_API_KEY: z.string().optional(),

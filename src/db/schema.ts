@@ -11,7 +11,26 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-export const user = pgTable("User", {
+// -------------------------------
+// src/db/schema.ts
+//
+// export const user           L33
+// export type User            L45
+// export const chat           L47
+// export type Chat            L59
+// export const message        L61
+// export type DBMessage       L72
+// export const vote           L74
+// export type Vote            L90
+// export const document       L92
+// export type Document       L111
+// export const suggestion    L113
+// export type Suggestion     L137
+// export const stream        L139
+// export type Stream         L155
+// -------------------------------
+
+export const user = pgTable("users", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   email: varchar("email", { length: 64 }).notNull(),
   password: varchar("password", { length: 64 }),
@@ -25,7 +44,7 @@ export const user = pgTable("User", {
 
 export type User = InferSelectModel<typeof user>;
 
-export const chat = pgTable("Chat", {
+export const chat = pgTable("chats", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   createdAt: timestamp("createdAt").notNull(),
   title: text("title").notNull(),
@@ -39,7 +58,7 @@ export const chat = pgTable("Chat", {
 
 export type Chat = InferSelectModel<typeof chat>;
 
-export const message = pgTable("Message_v2", {
+export const message = pgTable("messages", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   chatId: uuid("chatId")
     .notNull()
@@ -53,7 +72,7 @@ export const message = pgTable("Message_v2", {
 export type DBMessage = InferSelectModel<typeof message>;
 
 export const vote = pgTable(
-  "Vote_v2",
+  "votes",
   {
     chatId: uuid("chatId")
       .notNull()
@@ -71,7 +90,7 @@ export const vote = pgTable(
 export type Vote = InferSelectModel<typeof vote>;
 
 export const document = pgTable(
-  "Document",
+  "documents",
   {
     id: uuid("id").notNull().defaultRandom(),
     createdAt: timestamp("createdAt").notNull(),
@@ -92,7 +111,7 @@ export const document = pgTable(
 export type Document = InferSelectModel<typeof document>;
 
 export const suggestion = pgTable(
-  "Suggestion",
+  "suggestions",
   {
     id: uuid("id").notNull().defaultRandom(),
     documentId: uuid("documentId").notNull(),
@@ -118,7 +137,7 @@ export const suggestion = pgTable(
 export type Suggestion = InferSelectModel<typeof suggestion>;
 
 export const stream = pgTable(
-  "Stream",
+  "streams",
   {
     id: uuid("id").notNull().defaultRandom(),
     chatId: uuid("chatId").notNull(),
