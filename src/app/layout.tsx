@@ -4,21 +4,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
-
-// -------------------------------------------
-// src/app/layout.tsx
-//
-// export const metadata                   L23
-// export const viewport                   L29
-// const geist                             L33
-// const geistMono                         L39
-// const LIGHT_THEME_COLOR                 L45
-// const DARK_THEME_COLOR                  L46
-// const THEME_COLOR_SCRIPT                L47
-// export default function RootLayout()    L65
-// children                                L68
-// -------------------------------------------
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://chat.vercel.ai"),
@@ -88,11 +73,7 @@ export default function RootLayout({
           disableTransitionOnChange
           enableSystem
         >
-          <SessionProvider
-            basePath={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/api/auth`}
-          >
-            <TooltipProvider>{children}</TooltipProvider>
-          </SessionProvider>
+          <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

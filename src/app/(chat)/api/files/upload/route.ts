@@ -1,8 +1,8 @@
 import { put } from "@vercel/blob";
+import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-
-import { auth } from "@/app/(auth)/auth";
+import { auth } from "@/lib/auth";
 
 const FileSchema = z.object({
   file: z
@@ -16,7 +16,7 @@ const FileSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -37,8 +37,8 @@ export async function POST(request: Request) {
     const validatedFile = FileSchema.safeParse({ file });
 
     if (!validatedFile.success) {
-      const errorMessage = validatedFile.error.errors
-        .map((error) => error.message)
+      const errorMessage = validatedFile.error.issues
+        .map((issue) => issue.message)
         .join(", ");
 
       return NextResponse.json({ error: errorMessage }, { status: 400 });

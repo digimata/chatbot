@@ -1,7 +1,7 @@
 import { tool, type UIMessageStreamWriter } from "ai";
-import type { Session } from "next-auth";
 import { z } from "zod";
 import { getDocumentById, saveDocument } from "@/db/queries";
+import type { Session } from "@/lib/auth";
 import type { ChatMessage } from "@/lib/types";
 
 // --------------------------------

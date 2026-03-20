@@ -1,22 +1,8 @@
-// --------------------------------------
-// src/app/(auth)/actions.ts
-//
-// const authFormSchema               L21
-// export type LoginActionState       L26
-// status                             L27
-// export const login                 L30
-// export type RegisterActionState    L56
-// status                             L57
-// export const register              L66
-// --------------------------------------
-
 "use server";
 
+import { headers } from "next/headers";
 import { z } from "zod";
-
-import { createUser, getUser } from "@/db/queries";
-
-import { signIn } from "./auth";
+import { auth } from "@/lib/auth";
 
 const authFormSchema = z.object({
   email: z.string().email(),
@@ -37,10 +23,12 @@ export const login = async (
       password: formData.get("password"),
     });
 
-    await signIn("credentials", {
-      email: validatedData.email,
-      password: validatedData.password,
-      redirect: false,
+    await auth.api.signInEmail({
+      headers: await headers(),
+      body: {
+        email: validatedData.email,
+        password: validatedData.password,
+      },
     });
 
     return { status: "success" };
@@ -73,22 +61,24 @@ export const register = async (
       password: formData.get("password"),
     });
 
-    const [user] = await getUser(validatedData.email);
-
-    if (user) {
-      return { status: "user_exists" } as RegisterActionState;
-    }
-    await createUser(validatedData.email, validatedData.password);
-    await signIn("credentials", {
-      email: validatedData.email,
-      password: validatedData.password,
-      redirect: false,
+    await auth.api.signUpEmail({
+      headers: await headers(),
+      body: {
+        email: validatedData.email,
+        password: validatedData.password,
+        name: validatedData.email,
+      },
     });
 
     return { status: "success" };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return { status: "invalid_data" };
+    }
+
+    const message = error instanceof Error ? error.message : "";
+    if (message.includes("already exists") || message.includes("UNIQUE")) {
+      return { status: "user_exists" };
     }
 
     return { status: "failed" };

@@ -11,29 +11,32 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-// -------------------------------
+// ---------------------------------
 // src/db/schema.ts
 //
-// export const user           L33
-// export type User            L45
-// export const chat           L47
-// export type Chat            L59
-// export const message        L61
-// export type DBMessage       L72
-// export const vote           L74
-// export type Vote            L90
-// export const document       L92
-// export type Document       L111
-// export const suggestion    L113
-// export type Suggestion     L137
-// export const stream        L139
-// export type Stream         L155
-// -------------------------------
+// export const user             L36
+// export type User              L48
+// export const session          L50
+// export const account          L63
+// export const verification     L81
+// export const chat             L90
+// export type Chat             L102
+// export const message         L104
+// export type DBMessage        L115
+// export const vote            L117
+// export type Vote             L133
+// export const document        L135
+// export type Document         L154
+// export const suggestion      L156
+// export type Suggestion       L180
+// export const stream          L182
+// export type Stream           L198
+// ---------------------------------
 
 export const user = pgTable("users", {
-  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  id: text("id").primaryKey(),
   email: varchar("email", { length: 64 }).notNull(),
-  password: varchar("password", { length: 64 }),
+  password: text("password"),
   name: text("name"),
   emailVerified: boolean("emailVerified").notNull().default(false),
   image: text("image"),
@@ -44,11 +47,57 @@ export const user = pgTable("users", {
 
 export type User = InferSelectModel<typeof user>;
 
+export const session = pgTable("sessions", {
+  id: text("id").primaryKey(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  token: text("token").notNull().unique(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  ipAddress: text("ipAddress"),
+  userAgent: text("userAgent"),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id),
+});
+
+export type Session = InferSelectModel<typeof session>;
+
+export const account = pgTable("accounts", {
+  id: text("id").primaryKey(),
+  accountId: text("accountId").notNull(),
+  providerId: text("providerId").notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id),
+  accessToken: text("accessToken"),
+  refreshToken: text("refreshToken"),
+  idToken: text("idToken"),
+  accessTokenExpiresAt: timestamp("accessTokenExpiresAt"),
+  refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt"),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+export type Account = InferSelectModel<typeof account>;
+
+export const verification = pgTable("verifications", {
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  createdAt: timestamp("createdAt"),
+  updatedAt: timestamp("updatedAt"),
+});
+
+export type Verification = InferSelectModel<typeof verification>;
+
 export const chat = pgTable("chats", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   createdAt: timestamp("createdAt").notNull(),
   title: text("title").notNull(),
-  userId: uuid("userId")
+  userId: text("userId")
     .notNull()
     .references(() => user.id),
   visibility: varchar("visibility", { enum: ["public", "private"] })
@@ -99,7 +148,7 @@ export const document = pgTable(
     kind: varchar("text", { enum: ["text", "code", "image", "sheet"] })
       .notNull()
       .default("text"),
-    userId: uuid("userId")
+    userId: text("userId")
       .notNull()
       .references(() => user.id),
   },
@@ -120,7 +169,7 @@ export const suggestion = pgTable(
     suggestedText: text("suggestedText").notNull(),
     description: text("description"),
     isResolved: boolean("isResolved").notNull().default(false),
-    userId: uuid("userId")
+    userId: text("userId")
       .notNull()
       .references(() => user.id),
     createdAt: timestamp("createdAt").notNull(),

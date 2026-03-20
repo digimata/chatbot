@@ -1,7 +1,6 @@
+import { getSessionCookie } from "better-auth/cookies";
 import { NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
-import { signIn } from "@/app/(auth)/auth";
-import { isDevelopmentEnvironment } from "@/lib/constants";
+import { auth } from "@/lib/auth";
 import { env } from "@/lib/env";
 
 export async function GET(request: Request) {
@@ -12,16 +11,15 @@ export async function GET(request: Request) {
       ? rawRedirect
       : "/";
 
-  const token = await getToken({
-    req: request,
-    secret: env.AUTH_SECRET,
-    secureCookie: !isDevelopmentEnvironment,
-  });
+  const sessionCookie = getSessionCookie(request);
 
-  if (token) {
+  if (sessionCookie) {
     const base = env.NEXT_PUBLIC_BASE_PATH;
     return NextResponse.redirect(new URL(`${base}/`, request.url));
   }
 
-  return signIn("guest", { redirect: true, redirectTo: redirectUrl });
+  await auth.api.signInAnonymous();
+
+  const base = env.NEXT_PUBLIC_BASE_PATH;
+  return NextResponse.redirect(new URL(`${base}${redirectUrl}`, request.url));
 }

@@ -1,5 +1,5 @@
+import { headers } from "next/headers";
 import { z } from "zod";
-import { auth } from "@/app/(auth)/auth";
 import type { ArtifactKind } from "@/components/chat/artifact";
 import {
   deleteDocumentsByIdAfterTimestamp,
@@ -7,6 +7,7 @@ import {
   saveDocument,
   updateDocumentContent,
 } from "@/db/queries";
+import { auth } from "@/lib/auth";
 import { ChatbotError } from "@/lib/errors";
 
 // --------------------------------------
@@ -36,7 +37,7 @@ export async function GET(request: Request) {
     ).toResponse();
   }
 
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user) {
     return new ChatbotError("unauthorized:document").toResponse();
@@ -68,7 +69,7 @@ export async function POST(request: Request) {
     ).toResponse();
   }
 
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user) {
     return new ChatbotError("not_found:document").toResponse();
@@ -137,7 +138,7 @@ export async function DELETE(request: Request) {
     ).toResponse();
   }
 
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user) {
     return new ChatbotError("unauthorized:document").toResponse();

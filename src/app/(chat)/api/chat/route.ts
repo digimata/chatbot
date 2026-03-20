@@ -8,24 +8,9 @@ import {
   streamText,
 } from "ai";
 import { checkBotId } from "botid/server";
+import { headers } from "next/headers";
 import { after } from "next/server";
 import { createResumableStreamContext } from "resumable-stream";
-import { auth, type UserType } from "@/app/(auth)/auth";
-import { entitlementsByUserType } from "@/lib/ai/entitlements";
-import {
-  allowedModelIds,
-  chatModels,
-  DEFAULT_CHAT_MODEL,
-} from "@/lib/ai/models";
-import { type RequestHints, systemPrompt } from "@/lib/ai/prompts";
-import { getLanguageModel } from "@/lib/ai/providers";
-import { createDocument } from "@/lib/ai/tools/create-document";
-import { editDocument } from "@/lib/ai/tools/edit-document";
-import { getWeather } from "@/lib/ai/tools/get-weather";
-import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
-import { updateDocument } from "@/lib/ai/tools/update-document";
-import { isProductionEnvironment } from "@/lib/constants";
-import { env } from "@/lib/env";
 import {
   createStreamId,
   deleteChatById,
@@ -38,6 +23,22 @@ import {
   updateMessage,
 } from "@/db/queries";
 import type { DBMessage } from "@/db/schema";
+import { entitlementsByIsAnonymous } from "@/lib/ai/entitlements";
+import {
+  allowedModelIds,
+  chatModels,
+  DEFAULT_CHAT_MODEL,
+} from "@/lib/ai/models";
+import { type RequestHints, systemPrompt } from "@/lib/ai/prompts";
+import { getLanguageModel } from "@/lib/ai/providers";
+import { createDocument } from "@/lib/ai/tools/create-document";
+import { editDocument } from "@/lib/ai/tools/edit-document";
+import { getWeather } from "@/lib/ai/tools/get-weather";
+import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
+import { updateDocument } from "@/lib/ai/tools/update-document";
+import { auth } from "@/lib/auth";
+import { isProductionEnvironment } from "@/lib/constants";
+import { env } from "@/lib/env";
 import { ChatbotError } from "@/lib/errors";
 import { checkIpRateLimit } from "@/lib/ratelimit";
 import type { ChatMessage } from "@/lib/types";
@@ -83,7 +84,7 @@ export async function POST(request: Request) {
 
     const [, session] = await Promise.all([
       checkBotId().catch(() => null),
-      auth(),
+      auth.api.getSession({ headers: await headers() }),
     ]);
 
     if (!session?.user) {
@@ -96,14 +97,18 @@ export async function POST(request: Request) {
 
     await checkIpRateLimit(ipAddress(request));
 
-    const userType: UserType = session.user.type;
+    const isAnonymous = session.user.isAnonymous ?? false;
 
     const messageCount = await getMessageCountByUserId({
       id: session.user.id,
       differenceInHours: 1,
     });
 
-    if (messageCount > entitlementsByUserType[userType].maxMessagesPerHour) {
+    if (
+      messageCount >
+      entitlementsByIsAnonymous[isAnonymous ? "true" : "false"]
+        .maxMessagesPerHour
+    ) {
       return new ChatbotError("rate_limit:chat").toResponse();
     }
 
@@ -339,7 +344,7 @@ export async function DELETE(request: Request) {
     return new ChatbotError("bad_request:api").toResponse();
   }
 
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user) {
     return new ChatbotError("unauthorized:chat").toResponse();

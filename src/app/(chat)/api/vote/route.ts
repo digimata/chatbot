@@ -1,6 +1,7 @@
+import { headers } from "next/headers";
 import { z } from "zod";
-import { auth } from "@/app/(auth)/auth";
 import { getChatById, getVotesByChatId, voteMessage } from "@/db/queries";
+import { auth } from "@/lib/auth";
 import { ChatbotError } from "@/lib/errors";
 
 // ------------------------------------
@@ -28,7 +29,7 @@ export async function GET(request: Request) {
     ).toResponse();
   }
 
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user) {
     return new ChatbotError("unauthorized:vote").toResponse();
@@ -66,7 +67,7 @@ export async function PATCH(request: Request) {
     ).toResponse();
   }
 
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user) {
     return new ChatbotError("unauthorized:vote").toResponse();

@@ -8,7 +8,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { User } from "next-auth";
+import type { Session } from "@/lib/auth";
+
+type User = Session["user"];
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { useSWRConfig } from "swr";

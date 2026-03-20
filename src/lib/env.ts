@@ -16,6 +16,7 @@ const envSchema = z.object({
 
   // --- Auth ---
   AUTH_SECRET: isServer ? z.string().min(1) : z.string().optional(),
+  BETTER_AUTH_URL: z.string().optional().default("http://localhost:3000"),
 
   // --- AI Providers (set the ones you use) ---
   OPENAI_API_KEY: z.string().optional(),
@@ -46,7 +47,7 @@ const envSchema = z.object({
 });
 
 export const env = envSchema.parse(
-  typeof process !== "undefined" ? process.env : {},
+  typeof process === "undefined" ? {} : process.env
 );
 
 export type Env = z.infer<typeof envSchema>;

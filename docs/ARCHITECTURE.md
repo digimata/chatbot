@@ -1,5 +1,5 @@
 ---
-path: ARCHITECTURE.md
+path: docs/ARCHITECTURE.md
 outline: |
   • Architecture                               L17
     ◦ Directory Structure                      L25
@@ -7,11 +7,11 @@ outline: |
       ▪ AI Layer (src/lib/ai/)                 L52
       ▪ Artifacts (src/artifacts/)             L63
       ▪ Database (src/lib/db/)                 L71
-      ▪ Authentication (src/app/(auth)/)       L87
-      ▪ Middleware (src/proxy.ts)              L95
-    ◦ Data Flow                               L107
-    ◦ Key Dependencies                        L114
-    ◦ Infrastructure                          L126
+      ▪ Authentication (src/lib/auth.ts)       L90
+      ▪ Middleware (src/proxy.ts)              L98
+    ◦ Data Flow                               L109
+    ◦ Key Dependencies                        L116
+    ◦ Infrastructure                          L128
 ---
 
 # Architecture
@@ -27,7 +27,7 @@ Last updated: `2026.03.20`
 ```
 src/
 ├── app/              # Next.js App Router (routes, layouts, API handlers)
-│   ├── (auth)/       # Login, register, guest auth, NextAuth config
+│   ├── (auth)/       # Login, register, guest auth, BetterAuth config
 │   └── (chat)/       # Chat UI, API routes (chat, history, models, vote, documents)
 ├── artifacts/        # Artifact type handlers (text, code, sheet, image)
 ├── components/
@@ -51,7 +51,7 @@ public/               # Static assets
 
 ### AI Layer (`src/lib/ai/`)
 
-Models are routed through the **Vercel AI Gateway** (`gateway.languageModel()`), which handles provider fallback chains. The default model is `moonshotai/kimi-k2-0905`. Each model declares capabilities — tools, vision, reasoning — which gate what features the UI exposes.
+Models are routed directly through AI SDK provider packages (`@ai-sdk/openai`, `@ai-sdk/anthropic`, `@ai-sdk/google`). The default model is `openai/gpt-5.2`. Each model declares capabilities — tools, vision, reasoning — which gate what features the UI exposes.
 
 Chat completions use the AI SDK's `streamText()`. The system prompt is request-aware (injects geolocation) and varies by context: regular chat, artifact creation, code generation, or spreadsheet generation.
 
@@ -74,31 +74,33 @@ Streaming uses typed delta parts (`textDelta`, `codeDelta`, `sheetDelta`) pushed
 
 | Table | Purpose |
 |---|---|
-| `user` | Accounts (regular + guest) with bcrypt passwords |
-| `chat` | Conversations with title, visibility (public/private) |
-| `message_v2` | Messages with role, parts (JSON), attachments |
-| `document` | Artifact content, versioned by `(id, createdAt)` |
-| `vote_v2` | Per-message thumbs up/down |
-| `suggestion` | Writing suggestions linked to documents |
-| `stream` | Resumable stream metadata (Redis-backed) |
+| `users` | User accounts with bcrypt passwords, `isAnonymous` flag for guests |
+| `sessions` | BetterAuth session records (written on sign-in/out, cookie-cached) |
+| `accounts` | Auth method links (email/password stored here by BetterAuth) |
+| `verifications` | Email verification tokens (forward-looking, unused) |
+| `chats` | Conversations with title, visibility (public/private) |
+| `messages` | Messages with role, parts (JSON), attachments |
+| `documents` | Artifact content, versioned by `(id, createdAt)` |
+| `votes` | Per-message thumbs up/down |
+| `suggestions` | Writing suggestions linked to documents |
+| `streams` | Resumable stream metadata (Redis-backed) |
 
 History uses cursor-based pagination (`startingAfter`/`endingBefore`).
 
-### Authentication (`src/app/(auth)/`)
+### Authentication (`src/lib/auth.ts`)
 
-**NextAuth.js v5** with two credential providers:
-1. **Email/password** — bcrypt hashing, timing-attack-safe comparison
-2. **Guest** — auto-created anonymous users (`guest-{timestamp}`)
+**BetterAuth** with Drizzle adapter. Two auth methods:
+1. **Email/password** — bcrypt hashing via `bcrypt-ts`, custom hash/verify for backward compatibility
+2. **Anonymous** — auto-created guest users via the `anonymous` plugin (`guest-{timestamp}@anon.local`)
 
-Sessions are JWT-based. The middleware (`src/proxy.ts`) validates tokens on every request and redirects unauthenticated users to the guest flow.
+Sessions use cookie cache (no DB hit per request). The middleware (`src/proxy.ts`) checks for session cookies and redirects unauthenticated users to the guest flow. Server-side session access via `auth.api.getSession({ headers })`.
 
 ### Middleware (`src/proxy.ts`)
 
 Edge middleware that runs on all non-static routes:
 - `/ping` → health check
 - `/api/auth/*` → passthrough
-- No token → redirect to `/api/auth/guest`
-- Authenticated non-guests → blocked from `/login`, `/register`
+- No session cookie → redirect to `/api/auth/guest` (creates anonymous session)
 
 Base-path aware for multi-tenant deployment (`IS_DEMO` env).
 
@@ -117,7 +119,7 @@ Base-path aware for multi-tenant deployment (`IS_DEMO` env).
 |---|---|
 | AI | `ai`, `@ai-sdk/react` (Vercel AI SDK) |
 | Database | `drizzle-orm`, `postgres` |
-| Auth | `next-auth` v5 beta, `bcrypt-ts` |
+| Auth | `better-auth`, `bcrypt-ts` |
 | Editors | `prosemirror-*`, `codemirror`, `react-data-grid` |
 | Rendering | `streamdown`, `shiki`, `katex` |
 | UI | `radix-ui`, `lucide-react`, `tailwindcss` v4 |
